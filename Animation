@@ -1,0 +1,70 @@
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+local walkAnimationId = "rbxassetid://5882139526"
+local stopAnimationId = "rbxassetid://5912982391"
+local attackAnimationId = "rbxassetid://6132680076"
+
+local walkAnimation = Instance.new("Animation")
+walkAnimation.AnimationId = walkAnimationId
+local stopAnimation = Instance.new("Animation")
+stopAnimation.AnimationId = stopAnimationId
+local attackAnimation = Instance.new("Animation")
+attackAnimation.AnimationId = attackAnimationId
+
+local animator = humanoid:FindFirstChildOfClass("Animator") or Instance.new("Animator", humanoid)
+
+local walkAnimationTrack = animator:LoadAnimation(walkAnimation)
+local stopAnimationTrack = animator:LoadAnimation(stopAnimation)
+local attackAnimationTrack = animator:LoadAnimation(attackAnimation)
+
+local function isMoving()
+    return humanoid.MoveDirection.Magnitude > 0.4
+end
+
+local function playAttackAnimation()
+    if walkAnimationTrack.IsPlaying then
+        walkAnimationTrack:Stop()
+    end
+    if stopAnimationTrack.IsPlaying then
+        stopAnimationTrack:Stop()
+    end
+
+    attackAnimationTrack:Play()
+    attackAnimationTrack.Stopped:Wait()
+end
+
+local UserInputService = game:GetService("UserInputService")
+UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
+    if not gameProcessedEvent and input.KeyCode == Enum.KeyCode.E then
+        playAttackAnimation()
+    end
+end)
+
+local function increaseSpeed()
+    humanoid.WalkSpeed = 35
+end
+
+increaseSpeed()
+
+for i = 1, 5 do
+    while true do
+        if isMoving() then
+            if not walkAnimationTrack.IsPlaying then
+                walkAnimationTrack:Play()
+                stopAnimationTrack:Stop()
+            end
+        else
+            if walkAnimationTrack.IsPlaying then
+                walkAnimationTrack:Stop()
+                wait(0)
+            end
+            if not stopAnimationTrack.IsPlaying then
+                stopAnimationTrack:Play()
+            end
+        end
+        wait(0.4)
+    end
+    wait(0.3)
+end
